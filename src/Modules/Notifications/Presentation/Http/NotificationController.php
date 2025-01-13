@@ -16,6 +16,7 @@ final readonly class NotificationController
 
     public function hook(string $action, string $reference): JsonResponse
     {
+
         match ($action) {
             'delivered' => $this->notificationService->delivered(reference: $reference),
             default => null,

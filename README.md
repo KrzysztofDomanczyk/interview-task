@@ -53,3 +53,49 @@ The invoice should contain the following fields:
 
 * Start the project by running `./start.sh`.
 * To access the container environment, use: `docker compose exec app bash`.
+
+
+## Example POST Create invoice:
+`{
+  "status": "draft",
+  "customer_name": "customer namee",
+  "customer_email": "email@wp.pl",
+  "product_lines": [
+    {
+      "product_name": "Nazwa produktu",
+      "quantity": 3,
+      "unit_price": 100
+    }
+  ]
+}
+`
+## Decisions:
+
+Controller Validation
+
+**Decision:**
+Validate incoming data in the controller before creating an invoice.
+
+**Reasoning:**
+Uses Laravel's built-in validation for clarity and efficiency. Ensures only valid data is processed.
+
+
+--
+
+State Machine for Status Transitions
+
+**Decision:**
+Implement a state machine for managing invoice status transitions.
+
+**Reasoning:**
+Allows clear control over status transitions, ensuring they follow business rules. It’s scalable for adding more states or transitions later.
+
+--
+
+Persistence of the Aggregate
+
+**Decision:**
+Used Eloquent ORM to saving entities. 
+
+**Reasoning:**
+Would be good to have repositories (e.g EloquentRepository) used by Aggregator but decided to not complicate the code for current purposes
