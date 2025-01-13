@@ -6,6 +6,7 @@ use App\Http\Requests\StoreInvoiceRequest;
 use App\Http\Resources\InvoiceResource;
 use Domain\Invoice\Aggregators\InvoiceAggregator;
 use Domain\Invoice\Models\Invoice;
+use DomainException;
 use Modules\Notifications\Api\NotificationFacadeInterface;
 
 
@@ -24,27 +25,26 @@ class InvoiceController
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(StoreInvoiceRequest $request)
     {
         try {
             $invoice = InvoiceAggregator::create($request->toDTO())->returnInvoice();
-        } catch (\DomainException $exception) {
+        } catch (DomainException $exception) {
             return response($exception->getMessage(), $exception->getCode());
         }
 
         return InvoiceResource::make($invoice);
     }
 
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+
+    }
 
     /**
      * Display the specified resource.
@@ -73,12 +73,9 @@ class InvoiceController
     public function sendInvoice(string $id)
     {
         try {
-
             $aggregator = InvoiceAggregator::get($id);
-
             $aggregator->sent();
-
-        } catch (\DomainException $exception) {
+        } catch (DomainException $exception) {
             return response()->json([
                 'success' => 'false',
                 'message' => $exception->getMessage()

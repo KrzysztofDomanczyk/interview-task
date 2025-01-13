@@ -99,7 +99,7 @@ class InvoiceAggregator
 
     private function validateBeforeSending()
     {
-        if($this->invoice->productLines()->count() == 0) {
+        if ($this->invoice->productLines()->count() == 0) {
             throw new ValidationBeforeSendingInvoiceFailedException();
         }
 
@@ -112,7 +112,6 @@ class InvoiceAggregator
 
     public function setStatus(StatusEnum $status)
     {
-
         $changed = $this->statusMachine->transitionTo($status);
 
         if ($changed) {
