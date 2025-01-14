@@ -9,20 +9,14 @@ use Domain\Invoice\Models\Invoice;
 use DomainException;
 use Modules\Notifications\Api\NotificationFacadeInterface;
 
-
 class InvoiceController
 {
-    public function __construct(NotificationFacadeInterface $notificationFacade)
-    {
-    }
+    public function __construct(NotificationFacadeInterface $notificationFacade) {}
 
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-
-    }
+    public function index() {}
 
     /**
      * Store a newly created resource in storage.
@@ -41,10 +35,7 @@ class InvoiceController
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-
-    }
+    public function create() {}
 
     /**
      * Display the specified resource.
@@ -78,12 +69,12 @@ class InvoiceController
         } catch (DomainException $exception) {
             return response()->json([
                 'success' => 'false',
-                'message' => $exception->getMessage()
+                'message' => $exception->getMessage(),
             ]);
         }
 
         return response()->json([
-            'success' => 'true'
+            'success' => 'true',
         ]);
     }
 }

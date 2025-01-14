@@ -18,15 +18,14 @@ use Ramsey\Uuid\Uuid;
 class InvoiceAggregator
 {
     const DEFAULT_STATUS = StatusEnum::Draft;
+
     protected InvoiceStatusMachine $statusMachine;
 
     public function __construct(
         protected Invoice $invoice
-    )
-    {
+    ) {
         $this->statusMachine = new InvoiceStatusMachine($this->invoice->status);
     }
-
 
     public static function get(string $uuid): InvoiceAggregator
     {
@@ -47,14 +46,13 @@ class InvoiceAggregator
                 'customer_name' => $DTO->customer_name,
             ]);
 
-
             $DTO->product_lines->map(function (CreateInvoiceProductLineDTO $lineDTO) use ($invoice) {
                 $invoice->productLines()->create([
                     'invoice_id' => $invoice->id,
                     'product_name' => $lineDTO->product_name,
                     'quantity' => $lineDTO->quantity,
                     'unit_price' => $lineDTO->unit_price,
-                    //In production app version, I would use Money PHP
+                    // In production app version, I would use Money PHP
                     'total_unit_price' => $lineDTO->unit_price * $lineDTO->quantity,
                 ]);
             });
@@ -78,7 +76,6 @@ class InvoiceAggregator
          */
         $notificationService = resolve(NotificationFacadeInterface::class);
 
-
         $this->validateBeforeSending();
 
         if ($this->statusMachine->canBeTransitionTo(StatusEnum::Sending)) {
@@ -100,12 +97,12 @@ class InvoiceAggregator
     private function validateBeforeSending()
     {
         if ($this->invoice->productLines()->count() == 0) {
-            throw new ValidationBeforeSendingInvoiceFailedException();
+            throw new ValidationBeforeSendingInvoiceFailedException;
         }
 
         foreach ($this->invoice->productLines()->cursor() as $productLine) {
             if ($productLine->quantity <= 0 || $productLine->unit_price <= 0) {
-                throw new ValidationBeforeSendingInvoiceFailedException();
+                throw new ValidationBeforeSendingInvoiceFailedException;
             }
         }
     }
@@ -126,7 +123,7 @@ class InvoiceAggregator
     {
         $changed = $this->setStatus(StatusEnum::SentToClient);
 
-        if (!$changed) {
+        if (! $changed) {
             throw new InvalidInvoiceStatusForSending($this->statusMachine->getCurrentState()->value);
         }
 

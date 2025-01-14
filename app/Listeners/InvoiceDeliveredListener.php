@@ -3,7 +3,6 @@
 namespace App\Listeners;
 
 use Domain\Invoice\Aggregators\InvoiceAggregator;
-use Domain\Invoice\Models\Invoice;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Modules\Notifications\Api\Events\ResourceDeliveredEvent;
 

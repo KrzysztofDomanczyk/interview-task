@@ -28,12 +28,15 @@ class InvoiceStatusMachine
     {
         if (in_array($newState, $this->transitions[$this->currentState->value] ?? [])) {
             $this->currentState = $newState;
+
             return true;
         }
+
         return false;
     }
 
-    public function canBeTransitionTo(StatusEnum $newState): bool {
+    public function canBeTransitionTo(StatusEnum $newState): bool
+    {
         return in_array($newState, $this->transitions[$this->currentState->value] ?? []);
     }
 }

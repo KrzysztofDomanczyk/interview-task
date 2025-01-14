@@ -7,10 +7,9 @@ use JetBrains\PhpStorm\Pure;
 
 class CannotBeMarkedAsDeliveredException extends DomainException
 {
-    #[Pure] public function __construct(string $status)
+    #[Pure]
+    public function __construct(string $status)
     {
-        parent::__construct('An invoice can only be marked as delivered if its current status is ' . $status, 0, null);
+        parent::__construct('An invoice can only be marked as delivered if its current status is '.$status, 0, null);
     }
-
 }
-

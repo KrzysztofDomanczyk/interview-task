@@ -19,12 +19,12 @@ use Tests\TestCase;
 
 class InvoiceAggregatorTest extends TestCase
 {
-    use WithFaker;
     use RefreshDatabase;
+    use WithFaker;
 
     protected Dispatcher $dispatcher;
 
-    public function testInvoiceCanBeCreatedOnlyWithDraftStatus(): void
+    public function test_invoice_can_be_created_only_with_draft_status(): void
     {
         $newInvoiceDTO = new CreateInvoiceDTO(
             StatusEnum::Draft,
@@ -49,7 +49,7 @@ class InvoiceAggregatorTest extends TestCase
         InvoiceAggregator::create($newInvoiceDTO);
     }
 
-    public function testInvoiceCanBeCreatedWithEmptyProductLines(): void
+    public function test_invoice_can_be_created_with_empty_product_lines(): void
     {
         $email = $this->faker->email();
 
@@ -67,18 +67,18 @@ class InvoiceAggregatorTest extends TestCase
         ]);
     }
 
-    public function testAnInvoiceCanBeSentOnlyInDraftStatus(): void
+    public function test_an_invoice_can_be_sent_only_in_draft_status(): void
     {
         $newInvoiceDTO = new CreateInvoiceDTO(
             StatusEnum::Draft,
             $this->faker->name(),
             $this->faker->email(),
-            collect( [
+            collect([
                 new CreateInvoiceProductLineDTO(
                     'Test1',
                     1,
                     10
-                )
+                ),
             ])
         );
 
@@ -94,12 +94,12 @@ class InvoiceAggregatorTest extends TestCase
             StatusEnum::Draft,
             $this->faker->name(),
             $this->faker->email(),
-            collect( [
+            collect([
                 new CreateInvoiceProductLineDTO(
                     'Test1',
                     1,
                     10
-                )
+                ),
             ])
         );
 
@@ -112,18 +112,18 @@ class InvoiceAggregatorTest extends TestCase
         $this->assertSame(StatusEnum::Sending, $aggregator->returnInvoice()->status);
     }
 
-    public function testAnInvoiceCanBeMarkedAsDeliveryWhenSendingStatusIsSet(): void
+    public function test_an_invoice_can_be_marked_as_delivery_when_sending_status_is_set(): void
     {
         $newInvoiceDTO = new CreateInvoiceDTO(
             StatusEnum::Draft,
             $this->faker->name(),
             $this->faker->email(),
-            collect( [
+            collect([
                 new CreateInvoiceProductLineDTO(
                     'Test1',
                     1,
                     10
-                )
+                ),
             ])
         );
 
@@ -142,7 +142,7 @@ class InvoiceAggregatorTest extends TestCase
         Event::dispatch(new ResourceDeliveredEvent(Uuid::fromString($aggregator->returnInvoice()->id)));
     }
 
-    public function testAnInvoiceMustContainProductLinesWithBothQuantityAndUnitPriceAsPositiveIntegersGreaterThanZero(): void
+    public function test_an_invoice_must_contain_product_lines_with_both_quantity_and_unit_price_as_positive_integers_greater_than_zero(): void
     {
         $newInvoiceDTO = new CreateInvoiceDTO(
             StatusEnum::Draft,
@@ -154,7 +154,7 @@ class InvoiceAggregatorTest extends TestCase
                         'Test1',
                         1,
                         10
-                    )
+                    ),
                 ]
             )
         );
@@ -175,7 +175,7 @@ class InvoiceAggregatorTest extends TestCase
                         'Test1',
                         0,
                         10
-                    )
+                    ),
                 ]
             )
         );
@@ -211,6 +211,6 @@ class InvoiceAggregatorTest extends TestCase
         $this->dispatcher = resolve(Dispatcher::class);
     }
 
-    //Would be good to add another tests for status machine
+    // Would be good to add another tests for status machine
 
 }
