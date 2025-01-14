@@ -46,7 +46,7 @@ class InvoiceAggregator
                 'customer_name' => $DTO->customer_name,
             ]);
 
-            $DTO->product_lines->map(function (CreateInvoiceProductLineDTO $lineDTO) use ($invoice) {
+            $DTO->product_lines->map(function (CreateInvoiceProductLineDTO $lineDTO) use ($invoice): void {
                 $invoice->productLines()->create([
                     'invoice_id' => $invoice->id,
                     'product_name' => $lineDTO->product_name,
